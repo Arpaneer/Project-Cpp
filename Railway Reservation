@@ -1,0 +1,229 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <cstdlib>
+using namespace std;
+
+class Railway {
+private:
+    string name;
+    int age;
+    string source, destination;
+    int seatNo;
+    float fare;
+    int pnr;
+    bool booked;
+
+    static int totalSeats;
+
+public:
+    Railway() {
+        booked = false;
+    }
+
+    void pause() {
+        cout << "\nPress Enter to Continue...";
+        cin.ignore();
+        cin.get();
+    }
+
+    void clearScreen() {
+        system("cls");
+    }
+
+    void bookTicket() {
+
+        if (totalSeats <= 0) {
+            cout << "\nNo Seats Available.\n";
+            pause();
+            return;
+        }
+
+        clearScreen();
+
+        cout << "\n------------------------------------\n";
+        cout << "         BOOK TRAIN TICKET          \n";
+        cout << "------------------------------------\n";
+
+        cin.ignore();
+
+        cout << "Passenger Name   : ";
+        getline(cin, name);
+
+        do {
+            cout << "Age              : ";
+            cin >> age;
+
+            if (age <= 0)
+                cout << "Enter Valid Age.\n";
+
+        } while (age <= 0);
+
+        cout << "\nSelect Train\n";
+        cout << "1. Rajdhani Express\n";
+        cout << "2. Shatabdi Express\n";
+        cout << "3. Duronto Express\n";
+        cout << "Enter Choice: ";
+
+        int train;
+        cin >> train;
+
+        switch (train) {
+        case 1: fare = 1200; break;
+        case 2: fare = 900;  break;
+        case 3: fare = 700;  break;
+        default: fare = 800;
+        }
+
+        cout << "Source Station   : ";
+        cin >> source;
+
+        cout << "Destination      : ";
+        cin >> destination;
+
+        seatNo = 51 - totalSeats;
+
+        pnr = rand() % 9000 + 1000;
+
+        booked = true;
+        totalSeats--;
+
+        cout << "\nTicket Booked Successfully.\n";
+        cout << "Your PNR Number: " << pnr << endl;
+
+        pause();
+    }
+
+    void showTicket() {
+
+        clearScreen();
+
+        if (!booked) {
+            cout << "\nNo Ticket Booked Yet.\n";
+            pause();
+            return;
+        }
+
+        cout << "\n====================================\n";
+        cout << "          TICKET DETAILS            \n";
+        cout << "====================================\n";
+
+        cout << left << setw(20) << "PNR No" << ": " << pnr << endl;
+        cout << left << setw(20) << "Name" << ": " << name << endl;
+        cout << left << setw(20) << "Age" << ": " << age << endl;
+        cout << left << setw(20) << "From" << ": " << source << endl;
+        cout << left << setw(20) << "To" << ": " << destination << endl;
+        cout << left << setw(20) << "Seat No" << ": " << seatNo << endl;
+        cout << left << setw(20) << "Fare" << ": Rs " << fare << endl;
+
+        cout << "====================================\n";
+
+        pause();
+    }
+
+    void cancelTicket() {
+
+        clearScreen();
+
+        if (!booked) {
+            cout << "\nNo Ticket to Cancel.\n";
+            pause();
+            return;
+        }
+
+        char ch;
+        cout << "Confirm Cancel (Y/N): ";
+        cin >> ch;
+
+        if (ch == 'Y' || ch == 'y') {
+
+            booked = false;
+            totalSeats++;
+
+            cout << "\nTicket Cancelled Successfully.\n";
+        }
+        else {
+            cout << "\nCancellation Aborted.\n";
+        }
+
+        pause();
+    }
+
+    void checkStatus() {
+
+        clearScreen();
+
+        cout << "\n------------------------------------\n";
+        cout << "        SEAT STATUS CHECK           \n";
+        cout << "------------------------------------\n";
+
+        cout << "Available Seats : " << totalSeats << endl;
+
+        if (booked)
+            cout << "Your Status : Booked\n";
+        else
+            cout << "Your Status : Not Booked\n";
+
+        pause();
+    }
+};
+
+int Railway::totalSeats = 50;
+
+int main() {
+
+    Railway r;
+    int choice;
+
+    do {
+
+        r.clearScreen();
+
+        cout << "\n====================================\n";
+        cout << "     RAILWAY RESERVATION SYSTEM     \n";
+        cout << "====================================\n";
+
+        cout << "1. Book Ticket\n";
+        cout << "2. View Ticket\n";
+        cout << "3. Cancel Ticket\n";
+        cout << "4. Check Seat Status\n";
+        cout << "5. Exit\n";
+
+        cout << "------------------------------------\n";
+        cout << "Enter Your Choice: ";
+        cin >> choice;
+
+        switch (choice) {
+
+        case 1:
+            r.bookTicket();
+            break;
+
+        case 2:
+            r.showTicket();
+            break;
+
+        case 3:
+            r.cancelTicket();
+            break;
+
+        case 4:
+            r.checkStatus();
+            break;
+
+        case 5:
+            cout << "\n--------------------------------\n";
+            cout << "Thank You for Using the System\n";
+            cout << "Indian Railways Simulation\n";
+            cout << "--------------------------------\n";
+            break;
+
+        default:
+            cout << "\nInvalid Choice.\n";
+            r.pause();
+        }
+
+    } while (choice != 5);
+
+    return 0;
+}
